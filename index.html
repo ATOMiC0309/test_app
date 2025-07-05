@@ -22,10 +22,14 @@
         .notification.show {
             opacity: 1;
         }
+        .profile-page {
+            text-align: center;
+            padding: 20px;
+        }
     </style>
 </head>
 <body>
-    <div id="profilePage">
+    <div id="profilePage" class="profile-page">
         <img id="profileImage" src="https://via.placeholder.com/100" alt="Profil rasmi">
         <p><strong>Full Name:</strong> <span id="fullName">Test</span></p>
         <p><strong>Username:</strong> <span id="username">Testusername</span></p>
@@ -42,7 +46,7 @@
             setTimeout(() => {
                 notification.classList.remove('show');
                 setTimeout(() => document.body.removeChild(notification), 300);
-            }, 5000);
+            }, 10000); // 10 soniya ko‘rsatish
         }
 
         const TelegramWebApp = window.Telegram?.WebApp;
@@ -51,7 +55,7 @@
         } else {
             TelegramWebApp.ready();
             const user = TelegramWebApp.initDataUnsafe?.user || {};
-            showNotification(`Foydalanuvchi ma'lumotlari: ${JSON.stringify(user)}`);
+            showNotification(`Foydalanuvchi ma'lumotlari: ID=${user.id || 'yo‘q'}, Ism=${user.first_name || 'yo‘q'}, Familiya=${user.last_name || 'yo‘q'}, Username=${user.username || 'yo‘q'}, Rasm=${user.photo_url || 'yo‘q'}`);
             const telegram_id = user.id?.toString() || '6167531583';
             const fullName = user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || 'Test';
             const username = user.username ? `@${user.username}` : 'Testusername';
