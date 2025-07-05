@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Web App Test</title>
+    <style>
+        .notification {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #d32f2f;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 5px;
+            z-index: 2000;
+            font-size: 16px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+        .notification.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+    <div id="profilePage">
+        <img id="profileImage" src="https://via.placeholder.com/100" alt="Profil rasmi">
+        <p><strong>Full Name:</strong> <span id="fullName">Test</span></p>
+        <p><strong>Username:</strong> <span id="username">Testusername</span></p>
+        <p><strong>Telegram ID:</strong> <span id="telegramId">123</span></p>
+    </div>
+
+    <script>
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            setTimeout(() => notification.classList.add('show'), 100);
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => document.body.removeChild(notification), 300);
+            }, 5000);
+        }
+
+        const TelegramWebApp = window.Telegram?.WebApp;
+        if (!TelegramWebApp) {
+            showNotification("Xato: Telegram Web App topilmadi. Telegram orqali oching.");
+        } else {
+            TelegramWebApp.ready();
+            const user = TelegramWebApp.initDataUnsafe?.user || {};
+            showNotification(`Foydalanuvchi ma'lumotlari: ${JSON.stringify(user)}`);
+            const telegram_id = user.id?.toString() || '6167531583';
+            const fullName = user.first_name && user.last_name ? `${user.first_name} ${user.last_name}` : user.first_name || 'Test';
+            const username = user.username ? `@${user.username}` : 'Testusername';
+            const profileImage = user.photo_url || 'https://via.placeholder.com/100';
+
+            document.getElementById('profileImage').src = profileImage;
+            document.getElementById('fullName').textContent = fullName;
+            document.getElementById('username').textContent = username;
+            document.getElementById('telegramId').textContent = telegram_id;
+        }
+    </script>
+</body>
+</html>
